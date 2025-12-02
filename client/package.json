@@ -34,12 +34,13 @@
   },
   "devDependencies": {
     "@angular/build": "^21.0.1",
-    "@angular/cli": "^21.0.1",
+    "@angular/cli": "^20.0.6",
     "@angular/compiler-cli": "^21.0.0",
-    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/postcss": "^4.1.17",
+    "daisyui": "^5.5.5",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.12",
+    "tailwindcss": "^4.1.17",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }
