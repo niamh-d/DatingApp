@@ -13,6 +13,10 @@
           "style": "css",
           "skipTests": true,
           "path": "src"
+        },
+        "@schematics/angular:service": {
+          "path": "src/core/services",
+          "skipTests": true
         }
       },
       "root": "",
