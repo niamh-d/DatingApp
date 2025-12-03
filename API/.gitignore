@@ -309,3 +309,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore,aspnetcore,windows
 
 appsettings.json
+appsettings.Development.json
