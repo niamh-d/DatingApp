@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { Nav } from '../layout/nav/nav';
-import { AccountService } from '../core/services/account-service';
 import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -13,7 +12,6 @@ import { Router, RouterOutlet } from '@angular/router';
 })
 export class App implements OnInit {
   protected router = inject(Router);
-  private accountService = inject(AccountService);
   private http = inject(HttpClient);
   protected members = signal<any>([]);
 
@@ -22,12 +20,7 @@ export class App implements OnInit {
     this.setCurrentUser();
   }
 
-  setCurrentUser() {
-    const userString = localStorage.getItem('user');
-    if (!userString) return;
-    const user = JSON.parse(userString);
-    this.accountService.currentUser.set(user);
-  }
+  setCurrentUser() {}
 
   async getMembers() {
     try {
