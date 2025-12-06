@@ -14,7 +14,7 @@ export class MemberService {
     return this.http.get<Member[]>(`${this.baseUrl}members`);
   }
 
-  getMember(id: number) {
+  getMember(id: string) {
     return this.http.get<Member>(`${this.baseUrl}members/${id}`);
   }
 }
