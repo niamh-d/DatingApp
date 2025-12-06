@@ -13,11 +13,11 @@ export class MemberService {
   private baseUrl = environment.apiUrl;
 
   getMembers() {
-    return this.http.get<Member[]>(`${this.baseUrl}/members`, this.getHttpOptions());
+    return this.http.get<Member[]>(`${this.baseUrl}members`, this.getHttpOptions());
   }
 
   getMember(id: number) {
-    return this.http.get<Member>(`${this.baseUrl}/members/${id}`, this.getHttpOptions());
+    return this.http.get<Member>(`${this.baseUrl}members/${id}`, this.getHttpOptions());
   }
 
   private getHttpOptions() {
