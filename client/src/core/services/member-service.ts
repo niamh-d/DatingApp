@@ -15,6 +15,10 @@ export class MemberService {
     this.editMode.set(!this.editMode());
   }
 
+  setEditMode(editMode: boolean) {
+    this.editMode.set(editMode);
+  }
+
   getEditMode() {
     return this.editMode();
   }
