@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { MemberService } from '../../../core/services/member-service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast-service';
+import { AccountService } from '../../../core/services/account-service';
 
 const emptyEditableMember: EditableMember = {
   displayName: '',
@@ -26,6 +27,7 @@ export class MemberProfile implements OnInit, OnDestroy {
     }
   }
 
+  private accountService = inject(AccountService);
   private toast = inject(ToastService);
   protected memberService = inject(MemberService);
   protected editableMember: EditableMember = emptyEditableMember;
@@ -54,6 +56,11 @@ export class MemberProfile implements OnInit, OnDestroy {
     const updatedMember = { ...member, ...this.editableMember };
     this.memberService.updateMember(this.editableMember).subscribe({
       next: () => {
+        const currentUser = this.accountService.currentUser();
+        if (currentUser && updatedMember.displayName !== currentUser?.displayName) {
+          currentUser.displayName = updatedMember.displayName;
+          this.accountService.setCurrentUser(currentUser);
+        }
         this.toast.success('Profile updated successfully!');
         this.memberService.setEditMode(false);
         this.memberService.member.set(updatedMember as Member);
