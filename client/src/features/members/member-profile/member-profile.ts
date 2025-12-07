@@ -1,4 +1,12 @@
-import { Component, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EditableMember, Member } from '../../../types/member';
 import { DatePipe } from '@angular/common';
@@ -21,6 +29,12 @@ const emptyEditableMember: EditableMember = {
 })
 export class MemberProfile implements OnInit, OnDestroy {
   @ViewChild('editForm') editForm?: NgForm;
+  @HostListener('window:beforeunload', ['$event']) notify($event: BeforeUnloadEvent) {
+    if (this.editForm?.dirty) {
+      $event.preventDefault();
+    }
+  }
+
   private toast = inject(ToastService);
   private route = inject(ActivatedRoute);
   protected member = signal<Member | undefined>(undefined);
