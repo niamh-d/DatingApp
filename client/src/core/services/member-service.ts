@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Member, Photo } from '../../types/member';
 
@@ -9,6 +9,15 @@ import { Member, Photo } from '../../types/member';
 export class MemberService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
+  private editMode = signal<boolean>(false);
+
+  toggleEditMode() {
+    this.editMode.set(!this.editMode());
+  }
+
+  getEditMode() {
+    return this.editMode();
+  }
 
   getMembers() {
     return this.http.get<Member[]>(`${this.baseUrl}members`);
