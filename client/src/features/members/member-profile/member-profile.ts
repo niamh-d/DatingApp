@@ -1,13 +1,4 @@
-import {
-  Component,
-  HostListener,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-  ViewChild,
-} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { EditableMember, Member } from '../../../types/member';
 import { DatePipe } from '@angular/common';
 import { MemberService } from '../../../core/services/member-service';
@@ -36,22 +27,18 @@ export class MemberProfile implements OnInit, OnDestroy {
   }
 
   private toast = inject(ToastService);
-  private route = inject(ActivatedRoute);
-  protected member = signal<Member | undefined>(undefined);
   protected memberService = inject(MemberService);
   protected editableMember: EditableMember = emptyEditableMember;
 
   constructor() {}
 
   ngOnInit(): void {
-    this.route.parent?.data.subscribe({
-      next: (data) => this.member.set(data['member']),
-    });
+    const member = this.memberService.member();
     this.editableMember = {
-      displayName: this.member()?.displayName || '',
-      description: this.member()?.description || '',
-      city: this.member()?.city || '',
-      country: this.member()?.country || '',
+      displayName: member?.displayName || '',
+      description: member?.description || '',
+      city: member?.city || '',
+      country: member?.country || '',
     };
   }
 
@@ -62,10 +49,16 @@ export class MemberProfile implements OnInit, OnDestroy {
   }
 
   updateProfile() {
-    if (!this.member()) return;
-    const updateMember = { ...this.member(), ...this.editableMember };
-    console.log(updateMember);
-    this.toast.success('Profile updated successfully!');
-    this.memberService.setEditMode(false);
+    const member = this.memberService.member();
+    if (!member) return;
+    const updatedMember = { ...member, ...this.editableMember };
+    this.memberService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        this.toast.success('Profile updated successfully!');
+        this.memberService.setEditMode(false);
+        this.memberService.member.set(updatedMember as Member);
+        this.editForm?.reset(updatedMember);
+      },
+    });
   }
 }
