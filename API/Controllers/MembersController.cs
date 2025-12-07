@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,11 +38,9 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateMember(MemberUpdateDto dto)
         {
-            var memberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var memberId = User.GetMemberId();
 
-            if (memberId == null) return BadRequest("Oops – no id found in the token");
-
-            var member = await memberRepository.GetMemberByIdAsync(memberId);
+            var member = await memberRepository.GetMemberForUpdate(memberId);
 
             if (member == null) return BadRequest("Member not found");
 
@@ -50,6 +48,8 @@ namespace API.Controllers
             member.Description = dto.Description ?? member.Description;
             member.City = dto.City ?? member.City;
             member.Country = dto.Country ?? member.Country;
+
+            member.User.DisplayName = dto.DisplayName ?? member.User.DisplayName;
 
             memberRepository.Update(member);
 
