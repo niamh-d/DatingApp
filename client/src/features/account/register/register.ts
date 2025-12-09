@@ -1,5 +1,13 @@
 import { Component, inject, OnInit, output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { type RegisterCreds } from '../../../types/user';
 import { AccountService } from '../../../core/services/account-service';
 import { JsonPipe } from '@angular/common';
@@ -25,8 +33,19 @@ export class Register implements OnInit {
       email: new FormControl('janedoe@example.com', [Validators.required, Validators.email]),
       displayName: new FormControl('Jane Doe', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      confirmPassword: new FormControl('', [Validators.required]),
+      confirmPassword: new FormControl('', [Validators.required, this.matchPwValues('password')]),
     });
+    this.registerForm.controls['password'].valueChanges.subscribe(() => {
+      this.registerForm.controls['confirmPassword'].updateValueAndValidity();
+    });
+  }
+
+  matchPwValues(matchTo: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const parent = control.parent;
+      if (!parent) return null;
+      return control.value === parent.get(matchTo)?.value ? null : { passWordMismatch: true };
+    };
   }
 
   register() {
