@@ -1,11 +1,5 @@
 import { Component, input, Self } from '@angular/core';
-import {
-  ControlValueAccessor,
-  Form,
-  FormControl,
-  NgControl,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-text-input',
@@ -15,7 +9,6 @@ import {
 })
 export class TextInput implements ControlValueAccessor {
   label = input<string>();
-  placeholder = input<string>();
   type = input<string>('text');
 
   constructor(@Self() public ngControl: NgControl) {

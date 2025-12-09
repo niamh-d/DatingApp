@@ -11,10 +11,11 @@ import {
 import { type RegisterCreds } from '../../../types/user';
 import { AccountService } from '../../../core/services/account-service';
 import { JsonPipe } from '@angular/common';
+import { TextInput } from '../../../shared/text-input/text-input';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, TextInput],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -30,10 +31,14 @@ export class Register implements OnInit {
 
   initializeForm() {
     this.registerForm = new FormGroup({
-      email: new FormControl('janedoe@example.com', [Validators.required, Validators.email]),
-      displayName: new FormControl('Jane Doe', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      displayName: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      confirmPassword: new FormControl('', [Validators.required, this.matchPwValues('password')]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        this.matchPwValues('password'),
+        Validators.minLength(8),
+      ]),
     });
     this.registerForm.controls['password'].valueChanges.subscribe(() => {
       this.registerForm.controls['confirmPassword'].updateValueAndValidity();
