@@ -1,0 +1,14 @@
+<label class="floating-label text-left">
+  <span>{{ label() }}</span>
+  <input
+    type="type()"
+    placeholder="label()"
+    class="input w-full"
+    [class.input-error]="control.invalid && control.touched"
+    [class.input-success]="control.valid && control.touched"
+    [formControl]="control"
+  />
+  @if (control.hasError('required')) {
+  <div class="text-error validator-hint text-xs">{{ label() }} is required</div>
+  }
+</label>
