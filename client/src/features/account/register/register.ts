@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -24,10 +24,12 @@ export class Register {
   private fb = inject(FormBuilder);
   cancelRegister = output<boolean>();
   protected creds = {} as RegisterCreds;
-  protected registerForm: FormGroup;
+  protected credentialsForm: FormGroup;
+  protected profileForm: FormGroup;
+  protected currStep = signal(1);
 
   constructor() {
-    this.registerForm = this.fb.group({
+    this.credentialsForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       displayName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -36,8 +38,15 @@ export class Register {
         [Validators.required, this.matchPwValues('password'), Validators.minLength(8)],
       ],
     });
-    this.registerForm.controls['password'].valueChanges.subscribe(() => {
-      this.registerForm.controls['confirmPassword'].updateValueAndValidity();
+    this.credentialsForm.controls['password'].valueChanges.subscribe(() => {
+      this.credentialsForm.controls['confirmPassword'].updateValueAndValidity();
+    });
+
+    this.profileForm = this.fb.group({
+      gender: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      city: ['', Validators.required],
+      country: ['', Validators.required],
     });
   }
 
@@ -49,8 +58,22 @@ export class Register {
     };
   }
 
+  nextStep() {
+    if (this.credentialsForm.valid) {
+      this.currStep.update((prevStep) => prevStep + 1);
+    }
+  }
+
+  prevStep() {
+    this.currStep.update((prevStep) => prevStep - 1);
+  }
+
   register() {
-    console.log(this.registerForm.value);
+    if (this.credentialsForm.valid && this.profileForm.valid) {
+      const formData = { ...this.credentialsForm.value, ...this.profileForm.value };
+      console.log('Form data', formData);
+    }
+
     // this.accountService.register(this.creds).subscribe({
     //   next: (res) => {
     //     console.log(res);
