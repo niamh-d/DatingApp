@@ -1,16 +1,15 @@
 import { Component, input, output } from '@angular/core';
 
 @Component({
-  selector: 'app-star-button',
+  selector: 'app-delete-button',
   imports: [],
-  templateUrl: './star-button.html',
-  styleUrl: './star-button.css',
+  templateUrl: './delete-button.html',
+  styleUrl: './delete-button.css',
 })
-export class StarButton {
+export class DeleteButton {
   disabled = input<boolean>(false);
   selected = input<boolean>(false);
   clickEvent = output<Event>();
-  applyCursorPointer = input<boolean>(true);
 
   onClick(event: Event) {
     this.clickEvent.emit(event);
