@@ -1,7 +1,7 @@
-import { Component, inject, OnInit, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
+  FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
@@ -19,26 +19,22 @@ import { TextInput } from '../../../shared/text-input/text-input';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register implements OnInit {
+export class Register {
   private accountService = inject(AccountService);
+  private fb = inject(FormBuilder);
   cancelRegister = output<boolean>();
   protected creds = {} as RegisterCreds;
-  protected registerForm: FormGroup = new FormGroup({});
+  protected registerForm: FormGroup;
 
-  ngOnInit(): void {
-    this.initializeForm();
-  }
-
-  initializeForm() {
-    this.registerForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      displayName: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      confirmPassword: new FormControl('', [
-        Validators.required,
-        this.matchPwValues('password'),
-        Validators.minLength(8),
-      ]),
+  constructor() {
+    this.registerForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      displayName: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: [
+        '',
+        [Validators.required, this.matchPwValues('password'), Validators.minLength(8)],
+      ],
     });
     this.registerForm.controls['password'].valueChanges.subscribe(() => {
       this.registerForm.controls['confirmPassword'].updateValueAndValidity();
