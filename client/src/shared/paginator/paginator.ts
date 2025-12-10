@@ -21,10 +21,18 @@ export class Paginator {
     if (newPage) {
       this.pageNumber.set(newPage);
     }
+
     if (pageSize) {
       const size = Number((pageSize as HTMLSelectElement).value);
       this.pageSize.set(size);
     }
-    this.pagechange.emit({ pageNumber: this.pageNumber(), pageSize: this.pageSize() });
+
+    this.pagechange.emit({
+      pageNumber:
+        this.pageNumber() * this.pageSize() > this.totalCount()
+          ? this.pageNumber() - 1
+          : this.pageNumber(),
+      pageSize: this.pageSize(),
+    });
   }
 }
