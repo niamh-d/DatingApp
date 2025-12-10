@@ -1,7 +1,56 @@
 <dialog class="modal" #filterModal>
   <div class="modal-box">
-    <h3 class="text-lg font-bold">Hello!</h3>
-    <p class="py-4">Press ESC key or click the button below to close</p>
+    <h3 class="text-lg font-bold">Select filters</h3>
+
+    <div class="flex justify-between w-full items-center mt-6">
+      <div class="flex flex-col w-full gap-6">
+        <label class="flex justify-between items-center">
+          <span class="font-semibold">Select gender:</span>
+          <form class="filter flex gap-1">
+            <input type="reset" value="x" class="btn btn-square" />
+            <input
+              type="radio"
+              class="btn"
+              [(ngModel)]="memberParams.gender"
+              name="gender"
+              value="male"
+              aria-label="Male"
+            />
+            <input
+              type="radio"
+              class="btn"
+              [(ngModel)]="memberParams.gender"
+              name="gender"
+              value="female"
+              aria-label="Female"
+            />
+          </form>
+        </label>
+        <label class="flex justify-between items-center">
+          <span class="font-semibold">Select age range</span>
+          <div class="flex gap-3">
+            <input
+              type="number"
+              class="input w-20"
+              [(ngModel)]="memberParams.minAge"
+              (change)="onMinAgeChange($event)"
+              name="minAge"
+              [min]="18"
+            />
+            <span class="self-center">to</span>
+            <input
+              type="number"
+              class="input w-20"
+              [(ngModel)]="memberParams.maxAge"
+              (change)="onMaxAgeChange($event)"
+              name="maxAge"
+              [min]="memberParams.minAge || 18"
+            />
+          </div>
+        </label>
+      </div>
+    </div>
+
     <div class="modal-action">
       <button class="btn btn-primary" (click)="submit()">Submit</button>
     </div>
