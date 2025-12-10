@@ -8,10 +8,10 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { type RegisterCreds } from '../../../types/user';
 import { AccountService } from '../../../core/services/account-service';
 import { JsonPipe } from '@angular/common';
 import { TextInput } from '../../../shared/text-input/text-input';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -20,13 +20,14 @@ import { TextInput } from '../../../shared/text-input/text-input';
   styleUrl: './register.css',
 })
 export class Register {
+  private router = inject(Router);
   private accountService = inject(AccountService);
   private fb = inject(FormBuilder);
   cancelRegister = output<boolean>();
-  protected creds = {} as RegisterCreds;
   protected credentialsForm: FormGroup;
   protected profileForm: FormGroup;
   protected currStep = signal(1);
+  protected validationErrors = signal<string[]>([]);
 
   constructor() {
     this.credentialsForm = this.fb.group({
@@ -43,7 +44,7 @@ export class Register {
     });
 
     this.profileForm = this.fb.group({
-      gender: ['', Validators.required],
+      gender: ['male', Validators.required],
       dateOfBirth: ['', Validators.required],
       city: ['', Validators.required],
       country: ['', Validators.required],
@@ -77,18 +78,17 @@ export class Register {
   register() {
     if (this.credentialsForm.valid && this.profileForm.valid) {
       const formData = { ...this.credentialsForm.value, ...this.profileForm.value };
-      console.log('Form data', formData);
-    }
 
-    // this.accountService.register(this.creds).subscribe({
-    //   next: (res) => {
-    //     console.log(res);
-    //     this.cancel();
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //   },
-    // });
+      this.accountService.register(formData).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/members');
+        },
+        error: (err) => {
+          console.log(err);
+          this.validationErrors.set(err);
+        },
+      });
+    }
   }
 
   cancel() {
