@@ -8,12 +8,12 @@ const cache = new Map<string, HttpEvent<unknown>>();
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const busyService = inject(BusyService);
 
-  if (req.method === 'GET') {
-    const cachedRes = cache.get(req.url);
-    if (cachedRes) {
-      return of(cachedRes);
-    }
-  }
+  // if (req.method === 'GET') {
+  //   const cachedRes = cache.get(req.url);
+  //   if (cachedRes) {
+  //     return of(cachedRes);
+  //   }
+  // }
 
   busyService.busy();
 
