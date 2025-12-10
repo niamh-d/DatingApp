@@ -68,6 +68,12 @@ export class Register {
     this.currStep.update((prevStep) => prevStep - 1);
   }
 
+  getMaxDate() {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+    return today.toISOString().split('T')[0];
+  }
+
   register() {
     if (this.credentialsForm.valid && this.profileForm.valid) {
       const formData = { ...this.credentialsForm.value, ...this.profileForm.value };

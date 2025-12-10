@@ -4,6 +4,7 @@
     [type]="type()"
     [placeholder]="label()"
     class="input w-full"
+    [max]="maxDate()"
     [class.input-error]="control.invalid && control.touched"
     [class.input-success]="control.valid && control.touched"
     [formControl]="control"
