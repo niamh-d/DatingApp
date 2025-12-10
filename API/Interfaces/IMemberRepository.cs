@@ -9,7 +9,7 @@ namespace API.Interfaces
 
         Task<bool> SaveAllAsync();
 
-        Task<PaginatedResult<Member>> GetMembersAsync(PagingParams pagingParams);
+        Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams);
 
         Task<Member?> GetMemberByIdAsync(string id);
 
