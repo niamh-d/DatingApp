@@ -11,11 +11,19 @@ export class Paginator {
   pageSize = model(10);
   totalCount = input(0);
   totalPages = input(0);
-  pageSizeOptions = input([5, 10, 20, 50]);
+  pageSizeOptions = input([1, 2, 3, 5, 10, 20, 50]);
 
   pagechange = output<{ pageNumber: number; pageSize: number }>();
 
   lastItemIndex = computed(() => Math.min(this.pageNumber() * this.pageSize(), this.totalCount()));
+
+  checkOverflow() {
+    return this.pageNumber() * this.pageSize() > this.totalCount();
+  }
+
+  lastValidPage() {
+    return Math.ceil(this.totalCount() / this.pageSize());
+  }
 
   onPageChange(newPage?: number, pageSize?: EventTarget | null) {
     if (newPage) {
@@ -28,10 +36,7 @@ export class Paginator {
     }
 
     this.pagechange.emit({
-      pageNumber:
-        this.pageNumber() * this.pageSize() > this.totalCount()
-          ? this.pageNumber() - 1
-          : this.pageNumber(),
+      pageNumber: this.checkOverflow() ? this.lastValidPage() : this.pageNumber(),
       pageSize: this.pageSize(),
     });
   }
