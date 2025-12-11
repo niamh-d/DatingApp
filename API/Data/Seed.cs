@@ -39,6 +39,8 @@ namespace API.Data
                         DisplayName = member.DisplayName,
                         Description = member.Description,
                         DateOfBirth = member.DateOfBirth,
+                        Created = member.Created,
+                        LastActive = member.LastActive,
                         Gender = member.Gender,
                         City = member.City,
                         Country = member.Country,
