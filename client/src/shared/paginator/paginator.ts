@@ -13,8 +13,9 @@ export class Paginator {
   totalPages = input(0);
   pageSizeOptions = input([1, 2, 3, 5, 10, 20, 50]);
 
-  pagechange = output<{ pageNumber: number; pageSize: number }>();
+  pageChange = output<{ pageNumber: number; pageSize: number }>();
 
+  firstItemIndex = computed(() => (this.pageNumber() - 1) * this.pageSize() + 1);
   lastItemIndex = computed(() => Math.min(this.pageNumber() * this.pageSize(), this.totalCount()));
 
   checkOverflow() {
@@ -35,7 +36,7 @@ export class Paginator {
       this.pageSize.set(size);
     }
 
-    this.pagechange.emit({
+    this.pageChange.emit({
       pageNumber: this.checkOverflow() ? this.lastValidPage() : this.pageNumber(),
       pageSize: this.pageSize(),
     });
