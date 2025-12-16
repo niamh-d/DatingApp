@@ -14,7 +14,7 @@ namespace API.Interfaces
 
         Task<PaginatedResult<MessageDto>> GetMessagesForMember(MessageParams messageParams);
 
-        Task<IReadOnlyList<MessageDto>> GetMessageThread(string curremtMemberId, string recipientId);
+        Task<IReadOnlyList<MessageDto>> GetMessageThread(string currentMemberId, string recipientId);
 
         Task<bool> SaveAllAsync();
     }
