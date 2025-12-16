@@ -12,7 +12,7 @@ namespace API.Interfaces
 
         Task<Message?> GetMessage(string id);
 
-        Task<PaginatedResult<MessageDto>> GetMessagesForMember();
+        Task<PaginatedResult<MessageDto>> GetMessagesForMember(MessageParams messageParams);
 
         Task<IReadOnlyList<MessageDto>> GetMessageThread(string curremtMemberId, string recipientId);
 
