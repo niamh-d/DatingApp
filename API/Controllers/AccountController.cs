@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -27,8 +26,7 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
         {
             DisplayName = dto.DisplayName,
             Email = dto.Email,
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)),
-            PaswordSalt = hmac.Key,
+            UserName = dto.Email,
             Member = new Member
             {
                 DisplayName = dto.DisplayName,
@@ -48,18 +46,11 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto dto)
     {
-        var user = await context.Users.SingleOrDefaultAsync(x => x.Email.ToLower() == dto.Email.ToLower());
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Email!.ToLower() == dto.Email.ToLower());
 
         if (user == null)
         {
             return Unauthorized("Invalid email");
-        }
-
-        using var hmac = new HMACSHA512(user.PaswordSalt);
-
-        if (!hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)).SequenceEqual(user.PasswordHash))
-        {
-            return Unauthorized("Invalid password");
         }
 
         return user.ToDto(tokenService);
@@ -67,6 +58,6 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
 
     private async Task<bool> EmailExists(string email)
     {
-        return await context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
+        return await context.Users.AnyAsync(x => x.Email!.ToLower() == email.ToLower());
     }
 }

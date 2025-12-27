@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using API.DTOs;
 using API.Entities;
@@ -30,9 +29,8 @@ namespace API.Data
                     Id = member.Id,
                     DisplayName = member.DisplayName,
                     Email = member.Email,
+                    UserName = member.Email,
                     ImageUrl = member.ImageUrl,
-                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd")),
-                    PaswordSalt = hmac.Key,
                     Member = new Member
                     {
                         Id = member.Id,
