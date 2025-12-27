@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MessageService } from '../../core/services/message-service';
-import { PaginatedResult } from '../../types/pagination';
+import { PaginatedResult, Pagination } from '../../types/pagination';
 import { Message } from '../../types/message';
 import { Paginator } from '../../shared/paginator/paginator';
 import { RouterLink } from '@angular/router';
@@ -36,6 +36,39 @@ export class Messages implements OnInit {
         this.fetchedContainer = this.container;
       },
     });
+  }
+
+  deleteMessage(event: Event, id: string) {
+    event.stopPropagation();
+    this.messageService.deleteMessage(id).subscribe({
+      next: () => {
+        const current = this.paginatedMessages();
+        if (current?.items) {
+          this.paginatedMessages.update((prev) => {
+            if (!prev) return null;
+
+            const newItems = prev.items?.filter((x) => x.id !== id) || [];
+
+            const newMetadata = prev.metadata
+              ? this.generateMetadata(prev.metadata)
+              : prev.metadata;
+
+            return { metadata: newMetadata, items: newItems };
+          });
+        }
+      },
+    });
+  }
+
+  private generateMetadata(metadata: Pagination) {
+    const newTotalCount = metadata.totalCount - 1;
+    const newMaxPage = Math.max(1, Math.ceil(newTotalCount / metadata.pageSize));
+    return {
+      ...metadata,
+      totalCount: newTotalCount,
+      totalPages: newMaxPage,
+      currentPage: Math.min(metadata.currentPage, newMaxPage),
+    };
   }
 
   get isInbox() {
