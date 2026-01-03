@@ -1,3 +1,4 @@
+using System.Collections;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,42 @@ namespace API.Controllers
                 });
             }
             return Ok(userList);
+        }
+
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost("edit-roles/{userId}")]
+        public async Task<ActionResult<IList<string>>> EditRoles(string userId, [FromQuery] string roles)
+        {
+            if (string.IsNullOrEmpty(roles))
+            {
+                return BadRequest("You must provide at least one role");
+            }
+
+            var selectedRoles = roles.Split(',').ToArray();
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return BadRequest("Could not find user");
+            }
+
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            var result = await userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Could not add roles");
+            }
+
+            result = await userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Could not remove roles");
+            }
+
+            return Ok(await userManager.GetRolesAsync(user));
         }
 
         [Authorize(Policy = "ModeratePhotoRole")]
