@@ -36,8 +36,11 @@ public class AccountController(UserManager<AppUser> userManager, ITokenService t
             {
                 ModelState.AddModelError("identity", error.Description);
             }
+
             return ValidationProblem();
         }
+
+        await userManager.AddToRoleAsync(user, "Member");
 
         return await user.ToDto(tokenService);
     }
