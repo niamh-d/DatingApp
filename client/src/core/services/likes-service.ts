@@ -13,7 +13,13 @@ export class LikesService {
   likeIds = signal<string[]>([]);
 
   toggleLike(targetMemberId: string) {
-    return this.http.post<void>(`${this.baseUrl}likes/${targetMemberId}`, {});
+    return this.http.post<void>(`${this.baseUrl}likes/${targetMemberId}`, {}).subscribe(() => {
+      if (this.likeIds().includes(targetMemberId)) {
+        this.likeIds.update((ids) => ids.filter((id) => id !== targetMemberId));
+      } else {
+        this.likeIds.update((ids) => [...ids, targetMemberId]);
+      }
+    });
   }
 
   getLikes(predicate: string, pageNumber: number, pageSize: number) {
