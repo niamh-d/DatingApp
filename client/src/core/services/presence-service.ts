@@ -1,13 +1,16 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { User } from '../../types/user';
+import { Message } from '../../types/message';
+import { ToastService } from './toast-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PresenceService {
   private hubUrl = environment.hubUrl;
+  private toast = inject(ToastService);
   public hubConnection?: HubConnection;
   public onlineUsers = signal<string[]>([]);
 
@@ -31,6 +34,15 @@ export class PresenceService {
 
     this.hubConnection.on('GetOnlineUsers', (userIds) => {
       this.onlineUsers.set(userIds);
+    });
+
+    this.hubConnection.on('NewMessageReceived', (message: Message) => {
+      this.toast.info(
+        message.senderDisplayName + ' has sent you a new message',
+        10_000,
+        message.senderImageUrl,
+        `/members/${message.senderId}/messages`
+      );
     });
   }
 

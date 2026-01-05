@@ -93,6 +93,7 @@ export class AccountService {
         this.currentUser.set(null);
       },
     });
+    this.presenceService.stopHubConnection();
   }
 
   private getRolesFromToken(user: User): string[] {
