@@ -31,12 +31,16 @@ export class Nav implements OnInit {
     this.selectedTheme.set(theme);
     localStorage.setItem('theme', theme);
     this.setDocumentTheme(theme);
-    const elem = document.activeElement as HTMLDivElement;
-    if (elem) elem.blur();
+    this.blurElement();
   }
 
   setDocumentTheme(theme: string) {
     document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  blurElement() {
+    const elem = document.activeElement as HTMLDivElement;
+    if (elem) elem.blur();
   }
 
   login() {
