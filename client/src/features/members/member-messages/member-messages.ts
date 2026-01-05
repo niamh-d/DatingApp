@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../core/pipes/time-ago-pipe';
 import { FormsModule } from '@angular/forms';
 import { PresenceService } from '../../../core/services/presence-service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-member-messages',
@@ -15,15 +16,15 @@ import { PresenceService } from '../../../core/services/presence-service';
 })
 export class MemberMessages implements OnInit {
   @ViewChild('messageEndRef') messageEndRef!: ElementRef;
-  private messageService = inject(MessageService);
+  protected messageService = inject(MessageService);
   private memberService = inject(MemberService);
-  protected messages = signal<Message[]>([]);
-  protected newMessageContent = '';
+  private route = inject(ActivatedRoute);
   protected presenceService = inject(PresenceService);
+  protected newMessageContent = '';
 
   constructor() {
     effect(() => {
-      const currentMessages = this.messages();
+      const currentMessages = this.messageService.messageThread();
       if (currentMessages.length > 0) {
         this.scrollToBottom();
       }
@@ -31,36 +32,21 @@ export class MemberMessages implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadMessages();
-  }
-
-  loadMessages() {
-    const memberId = this.memberService.member()?.id;
-    if (memberId) {
-      this.messageService.getMessageThread(memberId).subscribe({
-        next: (messages) =>
-          this.messages.set(
-            messages.map((message) => ({
-              ...message,
-              currentUserSender: message.senderId !== memberId,
-            }))
-          ),
-      });
-    }
+    this.route.parent?.paramMap.subscribe({
+      next: (params) => {
+        const otherUserId = params.get('id');
+        if (!otherUserId) throw new Error('Cannot connect to hub');
+        this.messageService.createHubConnection(otherUserId);
+      },
+    });
   }
 
   onSendMessage() {
     const recipientId = this.memberService.member()?.id;
     if (!recipientId) return;
 
-    this.messageService.sendMessage(recipientId, this.newMessageContent).subscribe({
-      next: (message) => {
-        this.messages.update((msgs) => {
-          message.currentUserSender = true;
-          return [...msgs, message];
-        });
-        this.newMessageContent = '';
-      },
+    this.messageService.sendMessage(recipientId, this.newMessageContent)?.then(() => {
+      this.newMessageContent = '';
     });
   }
 

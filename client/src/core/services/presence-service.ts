@@ -30,7 +30,6 @@ export class PresenceService {
     });
 
     this.hubConnection.on('GetOnlineUsers', (userIds) => {
-      console.log('GetOnlineUsers', userIds);
       this.onlineUsers.set(userIds);
     });
   }
