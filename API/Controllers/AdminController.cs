@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    public class AdminController(UserManager<AppUser> userManager) : BaseApiController
+    public class AdminController(UserManager<AppUser> userManager, IUnitOfWork uow) : BaseApiController
     {
         [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("users-with-roles")]
@@ -65,9 +66,9 @@ namespace API.Controllers
 
         [Authorize(Policy = "ModeratePhotoRole")]
         [HttpGet("photos-to-moderate")]
-        public ActionResult GetPhotosForModeration()
+        public async Task<ActionResult<IEnumerable<Photo>>> GetPhotosForModeration()
         {
-            return Ok("Admins or moderators should be able to see this");
+            return Ok(await uow.PhotoRepository.GetUnapprovedPhotos());
         }
     }
 }

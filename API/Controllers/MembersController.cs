@@ -35,7 +35,8 @@ namespace API.Controllers
         [HttpGet("{id}/photos")]
         public async Task<ActionResult<IReadOnlyList<Photo>>> GetPhotosForMember(string id)
         {
-            return Ok(await uow.MemberRepository.GetPhotosForMemberAsync(id));
+            var isCurrentUser = id == User.GetMemberId();
+            return Ok(await uow.MemberRepository.GetPhotosForMemberAsync(id, isCurrentUser));
         }
 
         [HttpPut]
