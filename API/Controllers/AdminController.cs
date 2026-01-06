@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    public class AdminController(UserManager<AppUser> userManager, IUnitOfWork uow) : BaseApiController
+    public class AdminController(UserManager<AppUser> userManager, IUnitOfWork uow, IPhotoService photoService) : BaseApiController
     {
         [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("users-with-roles")]
@@ -69,6 +69,52 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<Photo>>> GetPhotosForModeration()
         {
             return Ok(await uow.PhotoRepository.GetUnapprovedPhotos());
+        }
+
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpPost("approve-photo/{photoId}")]
+        public async Task<ActionResult> ApprovePhoto(int photoId)
+        {
+            var photo = await uow.PhotoRepository.GetPhotoById(photoId);
+
+            if (photo == null) return BadRequest("Photo not found");
+
+            photo.IsApproved = true;
+
+            if (await uow.Complete()) return Ok();
+
+            return BadRequest("Failed to approve photo");
+        }
+
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpPost("reject-photo/{photoId}")]
+        public async Task<ActionResult> RejectPhoto(int photoId)
+        {
+            var photo = await uow.PhotoRepository.GetPhotoById(photoId);
+
+            if (photo == null) return BadRequest("Photo not found");
+
+            if (photo.PublicId != null)
+            {
+                var result = await photoService.DeletePhotoAsync(photo.PublicId);
+
+                if (result.Result == "ok")
+                {
+                    uow.PhotoRepository.RemovePhoto(photo);
+                }
+                else
+                {
+                    return BadRequest("Failed to delete photo from cloud services");
+                }
+            }
+            else
+            {
+                uow.PhotoRepository.RemovePhoto(photo);
+            }
+
+            if (await uow.Complete()) return Ok();
+
+            return BadRequest("Failed to reject photo");
         }
     }
 }
