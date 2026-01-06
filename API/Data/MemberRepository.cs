@@ -17,6 +17,7 @@ namespace API.Data
             return await context.Members
             .Include(x => x.User)
             .Include(x => x.Photos)
+            .IgnoreQueryFilters()
             .SingleOrDefaultAsync(x => x.Id == id);
         }
 

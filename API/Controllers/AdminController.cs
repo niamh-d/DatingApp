@@ -79,7 +79,17 @@ namespace API.Controllers
 
             if (photo == null) return BadRequest("Photo not found");
 
+            var member = await uow.MemberRepository.GetMemberForUpdate(photo.MemberId);
+
+            if (member == null) return BadRequest("Member not found");
+
             photo.IsApproved = true;
+
+            if (member.ImageUrl == null)
+            {
+                member.ImageUrl = photo.Url;
+                member.User.ImageUrl = photo.Url;
+            }
 
             if (await uow.Complete()) return Ok();
 

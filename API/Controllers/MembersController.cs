@@ -80,12 +80,6 @@ namespace API.Controllers
                 MemberId = member.Id,
             };
 
-            if (member.ImageUrl == null)
-            {
-                member.ImageUrl = photo.Url;
-                member.User.ImageUrl = photo.Url;
-            }
-
             member.Photos.Add(photo);
 
             if (await uow.Complete()) return Ok(photo);
