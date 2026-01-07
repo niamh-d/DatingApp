@@ -32,7 +32,9 @@ namespace API.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(7),
+                // for demo app, jwt liftime is increased as frequency of client calls to API for new refresh token is significantly decreased
+                // all so as to reduce calls to API and DB
+                Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = creds
             };
 

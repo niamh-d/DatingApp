@@ -54,7 +54,7 @@ export class AccountService {
   }
 
   startTokenRefreshInterval() {
-    const INTERVAL = 5 * 60 * 1000;
+    const INTERVAL = 7 * 24 * 60 * 60 * 1000; // for demo app, only call to API for new refresh token every 7 days
 
     setInterval(() => {
       this.http
