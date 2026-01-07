@@ -78,6 +78,7 @@ namespace API.Controllers
                 Url = result.SecureUrl.AbsoluteUri,
                 PublicId = result.PublicId,
                 MemberId = member.Id,
+                IsApproved = true // for demo version of app, uploaded photos are automatically approved (thus bypassing moderation)
             };
 
             member.Photos.Add(photo);
