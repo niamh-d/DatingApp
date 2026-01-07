@@ -35,7 +35,7 @@
     <div #messageEndRef></div>
   </div>
 
-  <div class="flex join w-full">
+  <div class="flex join w-full gap-2">
     <input
       [(ngModel)]="newMessageContent"
       type="text"
@@ -43,6 +43,13 @@
       placeholder="Enter your message"
       (keydown.enter)="onSendMessage()"
     />
-    <button type="submit" class="btn btn-primary join-item" (click)="onSendMessage()">Send</button>
+    <button
+      type="submit"
+      class="btn btn-primary join-item"
+      (click)="onSendMessage()"
+      [disabled]="!newMessageContent()"
+    >
+      Send
+    </button>
   </div>
 </div>
