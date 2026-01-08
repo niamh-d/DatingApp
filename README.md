@@ -1,8 +1,10 @@
-# DOTNET + Angular Demo Dating App
+# DOTNET-Angular Demo chat and social app
 
 ## What is this?
 
-Demo project created with .NET and Angular. Part of Udemy course [_Build an app with ASPNET Core and Angular from scratch_](https://www.udemy.com/course/build-an-app-with-aspnet-core-and-angular-from-scratch)
+Demo chat and social app built with .NET 10 and Angular 21. Developed as part of course [_Build an app with ASPNET Core and Angular from scratch_](https://www.udemy.com/course/build-an-app-with-aspnet-core-and-angular-from-scratch).
+
+App features instant messaging, presence detection and image upload.
 
 ## Demo
 
@@ -28,18 +30,19 @@ Note that the demo site sleeps between usage so it will take a few seconds to fi
 
 - Backend: .NET 10
 - Frontend: Angular 21
-- ASP Identity
-- Entity Framework
-- SignalR
-- Azure
-- SQL Server
+- ASP Identity for authentication and authorization, roles
+- Entity Framework object-relational mapping
+- SignalR for presence detection and instant messaging
+- Online demo is deployed to Azure
+- SQL Server hosted on Azure
+- For local development, Docker houses an instance of SQL Server
 
 ## Features
 
 - Login, Register, Logout
 - User profile and editing
-- Instant messaging – SignalR Messages Hub allows for real-time communication between users (no need to refresh the page)
-- Presence detection – SignalR Presence Hub tracks which chat user is currently in (if any) and notifies user of new messages when user is outside chat
+- Instant messaging – real-time communication between users (no need to refresh the page)
+- Presence detection – notifies user of new messages when user is outside chat
 - Image upload, favouriting, deletion
 - Like/Unlike other users (liked users appear on Lists page)
 - Results pagination (Messages page, Matches page)
@@ -103,7 +106,7 @@ Again in API directory, create a file called `appsettings.json` and add the foll
 docker compose up -d
 ```
 
-3. Navigate to the API directory and run the following command:
+3. Navigate to the API directory and run the following command to start the server:
 
 ```
 cd API
@@ -134,7 +137,7 @@ cd API
 dotnet run
 ```
 
-4. Navigate to the client directory, install dependencies, and run the server:
+4. Navigate to the client directory, install dependencies, and run the frontend server:
 
 ```
 cd client
@@ -142,7 +145,7 @@ npm install
 ng serve
 ```
 
-5. Navigate to [http://localhost:4200](http://localhost:4200) to see the app.
+5. Navigate to [https://localhost:4200](https://localhost:4200) to see the app.
 
 6. When finished, run the following command:
 
@@ -156,7 +159,7 @@ The app runs on HTTPS by default.
 
 To set up self-signed certificates:
 
-1. For DOTNET read the [documentation](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-dev-certs)
+1. For DOTNET read the [documentation](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-dev-certs).
 2. For the frontend (if running frontend server separately), you can create a self-signed certificate using [mkcert](https://github.com/FiloSottile/mkcert).
 
 ### Build the frontend
