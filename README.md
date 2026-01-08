@@ -42,13 +42,31 @@ Note that the demo site sleeps between usage so it will take a few seconds to fi
 - Login, Register, Logout
 - User profile and editing
 - Instant messaging – real-time communication between users (no need to refresh the page)
-- Presence detection – notifies user of new messages when user is outside chat
+- Presence detection – notifies user of new messages when user is outside chat and shows online status for currently-online users
 - Image upload, favouriting, deletion
 - Like/Unlike other users (liked users appear on Lists page)
 - Results pagination (Messages page, Matches page)
 - Results filtering (Matches page)
 - Admin/Moderation panel
 - Roles: Admin, Moderator, Member (admin users can manage user roles; moderators can approve photos)
+
+## Screenshots
+
+### Messages Inbox
+
+<img src="ReadMeImages/AppScreenshots/message-inbox.png" width="700" alt="Messages Inbox"/>
+
+### Matches
+
+<img src="ReadMeImages/AppScreenshots/matches.png" width="700" alt="Matches"/>
+
+### Instant chat
+
+<img src="ReadMeImages/AppScreenshots/chat.png" width="700" alt="Instant chat"/>
+
+### User role management
+
+<img src="ReadMeImages/AppScreenshots/user-role-management.png" width="700" alt="User role management"/>
 
 ## Can this be run locally?
 
