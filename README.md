@@ -42,7 +42,7 @@ Note that the demo site sleeps between usage so it will take a few seconds to fi
 - Login, Register, Logout
 - User profile and editing
 - Instant messaging – real-time communication between users (no need to refresh the page)
-- Presence detection – notifies user of new messages when user is outside chat
+- Presence detection – notifies user of new messages when user is outside chat and shows online status for currently-online users
 - Image upload, favouriting, deletion
 - Like/Unlike other users (liked users appear on Lists page)
 - Results pagination (Messages page, Matches page)
