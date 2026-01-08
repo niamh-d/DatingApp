@@ -94,39 +94,7 @@ Again in API directory, create a file called `appsettings.json` and add the foll
 }
 ```
 
-### Running the app from the build files with a signle backend server (frontend build will be housed in API/wwwroot)
-
-1. Navigate to client directory, install dependencies and build the Angular app:
-
-```
-cd client
-npm install
-ng build
-```
-
-2. Open Docker.
-3. Run the following command:
-
-```
-docker compose up -d
-```
-
-4. Navigate to the API directory and run the following command:
-
-```
-cd API
-dotnet run
-```
-
-5. Navigate to [https://localhost:5001](https://localhost:5001) to see the app.
-
-6. When finished, run the following command:
-
-```
-docker compose down
-```
-
-### Running the app with both a backend server and a fronend server
+### OPTION 1 (Recommended): Running the app with a single server and pre-built frontend (frontend build is found in API/wwwroot)
 
 1. Open Docker.
 2. Run the following command:
@@ -136,6 +104,30 @@ docker compose up -d
 ```
 
 3. Navigate to the API directory and run the following command:
+
+```
+cd API
+dotnet run
+```
+
+4. Navigate to [https://localhost:5001](https://localhost:5001) to see the app.
+
+5. When finished, run the following command:
+
+```
+docker compose down
+```
+
+### OPTION 2: Running the app with both a backend server and a fronend server (not using pre-built frontend)
+
+1. Open Docker.
+2. Run the following command:
+
+```
+docker compose up -d
+```
+
+3. Navigate to the API directory and run the following command to start backend server:
 
 ```
 cd API
@@ -166,3 +158,21 @@ To set up self-signed certificates:
 
 1. For DOTNET read the [documentation](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-dev-certs)
 2. For the frontend (if running frontend server separately), you can create a self-signed certificate using [mkcert](https://github.com/FiloSottile/mkcert).
+
+### Build the frontend
+
+If you make changes to the frontend and wish to rebuild, run:
+
+```
+cd client
+ng build
+```
+
+## Making manual changes to the csproj file
+
+If you make changes to the csproj file, run the following command to resync the project before building:
+
+```
+cd api
+dotnet restore
+```
