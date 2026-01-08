@@ -50,6 +50,24 @@ Note that the demo site sleeps between usage so it will take a few seconds to fi
 - Admin/Moderation panel
 - Roles: Admin, Moderator, Member (admin users can manage user roles; moderators can approve photos)
 
+## Screenshots
+
+### Messages Inbox
+
+<img src="ReadMeImages/AppScreenshots/message-inbox.png" width="700" alt="Messages Inbox"/>
+
+### Matches
+
+<img src="ReadMeImages/AppScreenshots/matches.png" width="700" alt="Matches"/>
+
+### Instant chat
+
+<img src="ReadMeImages/AppScreenshots/chat.png" width="700" alt="Instant chat"/>
+
+### User role management
+
+<img src="ReadMeImages/AppScreenshots/user-role-management.png" width="700" alt="User role management"/>
+
 ## Can this be run locally?
 
 Yes, but it requires a little set up first. You'll need:
